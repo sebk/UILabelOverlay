@@ -56,20 +56,25 @@
 
 - (void)showOverlay {
     _isShown = YES;
-        
+    
     CGSize size = [self.text sizeWithAttributes:@{NSFontAttributeName: self.font}];
     CGFloat width = MIN(size.width, self.maxWidth);
     
-    UILabel *textLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 0, width, 21)];
+    UILabel *textLabel = [[UILabel alloc] init];
     textLabel.text = self.text;
     textLabel.font = self.font;
     textLabel.textColor = self.textColor;
     [textLabel setLineBreakMode:NSLineBreakByTruncatingTail];
     
-    self.textOverlayView.frame = CGRectMake(self.frame.origin.x, 0, width + 5, self.frame.size.height);
+    self.textOverlayView.frame = CGRectMake(self.frame.origin.x + _insets.left, self.frame.origin.y + _insets.top,
+                                            width + _insets.right, size.height + _insets.bottom);
     self.textOverlayView.alpha = 0.0f;
     
     [self.textOverlayView addSubview:textLabel];
+    
+    textLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.textOverlayView addConstraint:[NSLayoutConstraint constraintWithItem:textLabel attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.textOverlayView attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
+    [self.textOverlayView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-2.5-[textLabel]-0-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(textLabel)]];
     
     [self.superview addSubview:self.textOverlayView];
     

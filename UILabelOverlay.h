@@ -23,6 +23,8 @@
 /// Maximum width of the overlay
 @property(nonatomic, assign) CGFloat maxWidth;
 
+@property(nonatomic, assign) UIEdgeInsets insets;
+
 /**
  *  Hide the overlay.
  */
